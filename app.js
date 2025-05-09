@@ -27,7 +27,7 @@ app.post('/get-summary',async(req,res) =>{
 
     if (!transcript ||transcript.length === 0) {
         console.log('No transcript available');
-        return res.status(404).json({ error: 'Transcript not available for this video.' });
+        return res.status(404).json({ error: 'Not able to summarize this video' });
     }
     
     const text = transcript.map(t=>t.text).join('\n');
