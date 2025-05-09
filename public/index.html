@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Summary</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+ <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="title">AI YouTube Summarizer</div>
+  </nav>
+
+  <section class="hero">
+    <h1>Get Instant YouTube Video Summaries</h1>
+    <p class="subheading">Paste a YouTube link and get a concise summary in seconds.</p>
+    <form id="form" class="form-group">
+      <input type="text" id="url" placeholder="Enter YouTube Video URL" required>
+      <button type="submit">Summarize</button>
+    </form>
+    <div id="result" class="result-box"></div>
+  </section>
+
+  <script>
+    const form = document.getElementById('form');
+    const resultDiv = document.getElementById('result');
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const url = document.getElementById('url').value;
+      resultDiv.innerHTML = '<p class="loading">Fetching summary...</p>';
+
+      const response = await fetch('/get-summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+
+      const data = await response.json();
+      if (data.error) {
+        resultDiv.innerHTML = `<p class="error">${data.error}</p>`;
+      } else {
+        resultDiv.innerHTML = `
+  <div class="summary-container">
+    <button id="copy-btn">Copy</button>
+    <div class="summary-text">${data.summary}</div>
+  </div>
+`;
+const copyBtn = document.getElementById('copy-btn');
+copyBtn.onclick = () => {
+    const summaryText = document.querySelector('.summary-text').innerText;
+    navigator.clipboard.writeText(summaryText).then(() => {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => (copyBtn.textContent = 'Copy'), 2000);
+    });
+};
+
+      }
+    };
+  </script>
+</body>
+</html>
