@@ -7,7 +7,7 @@ const axios = require('axios');
 
 const app = express();
 const PORT = 3000;
-const API_KEY = 'AIzaSyBD8ifl82r0jZ4DWG1Op_7573SZWEkajL0';
+const API_KEY = 'gemini_api_key';
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -32,27 +32,11 @@ app.post('/get-summary',async(req,res) =>{
     
     const text = transcript.map(t=>t.text).join('\n');
     const dText= he.decode(text);
-     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
-     const requestBody = {
-        contents: [
-            {
-                parts: [
-                    {
-                        text: `Summarize the following YouTube video with this caption: ${dText}`
-                    }
-                ]
-            }
-        ]
-    };
-      const response = await axios.post(endpoint, requestBody, {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-
-        const summary = response.data.candidates[0].content.parts[0].text;
-  
-    
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+    const requestBody = {
+    contents: [{parts: [{text: `Summarize the following YouTube video with this caption: ${dText}`}]}]};
+    const response = await axios.post(endpoint, requestBody, {headers: {'Content-Type': 'application/json',}});
+    const summary = response.data.candidates[0].content.parts[0].text;
     res.json({summary:summary});
 
 }catch(error){
