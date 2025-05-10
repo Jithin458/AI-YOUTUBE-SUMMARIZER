@@ -1,6 +1,8 @@
 # AI YouTube Summarizer
 
 A simple web app that summarizes YouTube videos using AI.
+
+
 ![Image](https://github.com/user-attachments/assets/6e6341d9-b931-4397-882a-875f5794c83b)
 
 ## Features
